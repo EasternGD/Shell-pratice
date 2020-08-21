@@ -1,0 +1,13 @@
+command: cat ./myfile | grep Test
+executive time:
+
+real    0m5.230s
+user    0m0.125s
+sys 0m2.922s
+
+command: grep Test ./myfile
+executive time:
+
+real    0m5.213s
+user    0m0.172s
+sys 0m2.891s
