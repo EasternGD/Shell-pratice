@@ -1,13 +1,13 @@
 command: cat ./myfile | grep Test
 executive time:
 
-real    0m5.230s
-user    0m0.125s
-sys 0m2.922s
+real	0m0.903s
+user	0m0.000s
+sys	0m0.313s
 
 command: grep Test ./myfile
 executive time:
 
-real    0m5.213s
-user    0m0.172s
-sys 0m2.891s
+real	0m0.952s
+user	0m0.047s
+sys	0m0.328s

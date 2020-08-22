@@ -1,0 +1,14 @@
+       # common.lib
+           STD_MSSG="About to rename some files..."
+
+           rename()
+           {
+           FROM="$1"
+           TO="$2"
+
+           for i in *$FROM
+           do
+           j=`basename $i $FROM`
+           mv $i ${j}$TO
+           done
+           }
