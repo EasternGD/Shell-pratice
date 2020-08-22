@@ -1,5 +1,5 @@
        # common.lib
-           STD_MSSG="About to rename some files..."
+           STD_MSG="About to rename some files..."
 
            rename()
            {
