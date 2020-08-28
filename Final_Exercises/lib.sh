@@ -2,7 +2,11 @@ Search()
 {
     SearchNameByKeyword=`cut -d : -f 1 $FILE | grep "$1"`
     # Find the relevant data by the specific name.
-    cut -d : -f 1-3 $FILE | grep --color=auto "$SearchNameByKeyword"
+    result=$(cut -d : -f 1-3 $FILE | grep "$SearchNameByKeyword")
+    NAME=$(echo "$result" | cut -d : -f 1)
+    PHONE=$(echo "$result" | cut -d : -f 2)
+    MAIL=$(echo  "$result" | cut -d : -f 3)
+    echo "$NAME $PHONE $MAIL" | grep --color=auto  "$NAME"
 }
 
 Add()
@@ -25,12 +29,40 @@ Remove()
 
 Edit()
 {
-    new_lines=""
+    echo "Parameter: "
+    # echo "> 1 - $1"
+    # echo "> 2 - $2"
+    # echo "> 3 - $3"
+    content=""
     while read line; do
-        new_lines=$(echo $line | tr ":" "_")
-        # [[ "$line" != *"$1"* ]] && new_lines+="${line}\n"
+        if [[ -z $line ]]; then
+            continue
+        fi
+
+        NAME=$(echo "$line" | cut -d : -f 1)
+        PHONE=$(echo "$line" | cut -d : -f 2)
+        MAIL=$(echo "$line" | cut -d : -f 3)
+        #        echo "$NAME"
+        #        echo "$PHONE"
+        #        echo "$MAIL"
+
+        if [[ $1 == $NAME ]]; then
+            echo "Modify infomation about [$NAME] ... "
+            case $2 in
+                "-n")
+                    NAME=$3
+                    ;;
+                "-p")
+                    PHONE=$3
+                    ;;
+                "-m")
+                    MAIL=$3
+                    ;;
+            esac
+        fi
+        content+="$NAME:$PHONE:$MAIL\n"
     done < $FILE
-    #  echo -e $new_lines > $FILE
-    #  cat $FILE
+    echo -e $content > $FILE
+    # cat $FILE
 
 }
