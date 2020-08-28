@@ -3,6 +3,11 @@ Search()
     SearchNameByKeyword=`cut -d : -f 1 $FILE | grep "$1"`
     # Find the relevant data by the specific name.
     result=$(cut -d : -f 1-3 $FILE | grep "$SearchNameByKeyword")
+    if [ -z "$SearchNameByKeyword" ]; then
+        echo "[Error] "$1" not found."
+        return 1;
+    fi
+    echo "$SearchNameByKeyword"
     NAME=$(echo "$result" | cut -d : -f 1)
     PHONE=$(echo "$result" | cut -d : -f 2)
     MAIL=$(echo  "$result" | cut -d : -f 3)
@@ -50,19 +55,20 @@ Edit()
             echo "Modify infomation about [$NAME] ... "
             case $2 in
                 "-n")
-                    NAME=$3
+                    NAME="$3"
                     ;;
                 "-p")
-                    PHONE=$3
+                    PHONE="$3"
                     ;;
                 "-m")
-                    MAIL=$3
+                    MAIL="$3"
                     ;;
-            esac
+
+                esac
         fi
         content+="$NAME:$PHONE:$MAIL\n"
     done < $FILE
-    echo -e $content > $FILE
+    echo -e "$content" > $FILE
     # cat $FILE
 
 }
