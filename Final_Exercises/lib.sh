@@ -30,7 +30,7 @@ Search()
 
 Confirm()
 {
-    echo "Are you sure you want to $1 [ $2 ]? (Y/N)"
+    printf "Are you sure you want to $1 [ $2 ]? (Y/N) "
     read ans
     ans=`echo "$ans" | tr "[A-Z]" "[a-z]"`
     [ "$ans" == 'y' ] && return 0 || return 1
@@ -86,10 +86,10 @@ Edit()
                     ;;
 
                 esac
-            fi
-            content+="$NAME:$PHONE:$MAIL\n"
-        done < $FILE
-        echo -e "$content" > $FILE
-        # cat $FILE
+        fi
+        content+="$NAME:$PHONE:$MAIL\n"
+    done < $FILE
+    echo -e "$content" > $FILE
+    # cat $FILE
 
-    }
+}

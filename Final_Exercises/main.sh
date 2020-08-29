@@ -74,6 +74,7 @@ run()
                 printf "Please enter the name you want to remove:"
                 read n
                 Search "$n"
+                n=$NAME
                 Confirm "remove" "$n"
                 [ "$?" -eq "1" ] && continue
                 Remove "$n"
