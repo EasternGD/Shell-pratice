@@ -6,7 +6,7 @@ FILE=".record"
 
 menu()
 {
-    # Called by do_mesu
+    # Called by menu
     echo
     echo
     echo
@@ -17,7 +17,7 @@ menu()
     echo "3. Edit"
     echo "4. Remove"
     echo "q. Quit"
-    echo -en "Please enter your selection: "
+    printf "Please enter your selection: "
 }
 
 run()
@@ -29,46 +29,57 @@ run()
         read i
         case $i in
             "1")
-                echo "Please enter the name(surname, given name or full name) you want to search: "
+                printf "Please enter the name(surname, given name or full name) you want to search: "
                 read n
                 Search "$n"
                 ;;
             "2")
-                echo "Name:"
+                printf "[Name] "
                 read n
-                echo "Phone:"
+                printf "[Phone] "
                 read p
-                echo "Mail:"
+                printf "[Mail] "
                 read m
+                Confirm "add" "$n"
                 Add "$n" "$p" "$m"
+                Search "$n"
                 ;;
 
             "3")
-                echo "Please enter the name you want to edit his/her info.:"
+                printf "Please enter the name you want to edit his/her info.: "
                 read n
                 Search "$n"
                 # error 1
                 [[ $? == "1" ]] && continue
                 n=$NAME
-                echo "Which one do you want to modify?"
+                Confirm "edit" "$n"
+                [ "$?" -eq "1" ] && continue
                 echo "(N)ame  [ $NAME ]"
                 echo "(P)hone [ $PHONE ]"
                 echo "(M)ail  [ $MAIL ]"
+                printf "Which one do you want to modify? "
                 read flag
-                flag=$(echo "-$flag" | tr "[A-Z]" "[a-z]")
-                if [[ $flag != "n" || $flag != "p" || $flag != "m" ]];then
+                flag=${flag,,}
+                if [[ $flag != "n" ]] && [[ $flag != "p" ]] && [[ $flag != "m" ]]; then
                     echo "[Error] Unreconised input"
                     continue
                 fi
-                echo "Please enter the new value: "
+                printf "Please enter the new value: "
                 read new_value
                 Edit "$n" "$flag" "$new_value"
+                [ $flag == "n" ] && n=$new_value
                 Search "$n"
                 ;;
             "4")
-                echo "Please enter the name you want to remove:"
+                printf "Please enter the name you want to remove:"
                 read n
+                Search "$n"
+                Confirm "remove" "$n"
+                [ "$?" -eq "1" ] && continue
                 Remove "$n"
+                Search "all"
+                Search "$n"
+                echo "Done!"
                 ;;
             "q")
                 echo "Goodbye!"
@@ -80,21 +91,21 @@ run()
         done
     }
 
-# main()
-# Create the record file
-rm .record
+    # main()
+    # Create the record file
+    rm .record
 
-if [ -f ./"$FILE" ]; then
-    echo "[$FILE] already exists"
-else
-    touch "$FILE"
-    # Add some data for test
-    Add "Jhihrong, Chen" "+886-961102045" "encorf9241@gmail.com.tw"
-    Add "Hungming, Chen" "+886-2-27376585" "hungming@mail.ntust.edu.tw"
-    Add "Youming, Hsieh" "+886-2-27301056" "ymhsieh@mail.ntust.edu.tw"
-    Add "Menghan, Tsai" "+886-2-27376356" "menghan@mail.ntust.edu.tw"
-    Add "Tzuyi, Chuang" "+886-2-27301227" "jtychuang@mail.ntust.edu.tw"
-    Add "Naiwen, Chi" "+886-2-27376663" "nwchi@mail.ntust.edu.tw"
-fi
+    if [ -f ./"$FILE" ]; then
+        echo "[$FILE] already exists"
+    else
+        touch "$FILE"
+        # Add some data for test
+        Add "Jhihrong, Chen" "+886-961102045" "encorf9241@gmail.com.tw"
+        Add "Hungming, Chen" "+886-2-27376585" "hungming@mail.ntust.edu.tw"
+        Add "Youming, Hsieh" "+886-2-27301056" "ymhsieh@mail.ntust.edu.tw"
+        Add "Menghan, Tsai" "+886-2-27376356" "menghan@mail.ntust.edu.tw"
+        Add "Tzuyi, Chuang" "+886-2-27301227" "jtychuang@mail.ntust.edu.tw"
+        Add "Naiwen, Chi" "+886-2-27376663" "nwchi@mail.ntust.edu.tw"
+    fi
 
-run
+    run
